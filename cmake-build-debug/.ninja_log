@@ -1,0 +1,16 @@
+# ninja log v5
+12	406	7234989549048513	CMakeFiles/Proiect_OOP.dir/Preparate/Preparate.cpp.obj	ac38a25a577c35e3
+8	416	7234989549211320	CMakeFiles/Proiect_OOP.dir/ExceptionInput/ExceptionInput.cpp.obj	b90a26b936f811fa
+1	462	7234989549833734	CMakeFiles/Proiect_OOP.dir/main.cpp.obj	5bd9087059938537
+17	519	7234989550413039	CMakeFiles/Proiect_OOP.dir/Ingredient/Ingrediente.cpp.obj	18b329624035e53a
+2	37	7234990355486882	CMakeFiles/Proiect_OOP.dir/Comanda/Comanda.cpp.obj	92426fe747609dfa
+38	278	7234990357847427	Proiect_OOP.exe	b6840d21d9a53eb0
+2	293	7234990560478942	CMakeFiles/Proiect_OOP.dir/main.cpp.obj	5bd9087059938537
+295	369	7234990561199834	Proiect_OOP.exe	b6840d21d9a53eb0
+3	275	7235008677091655	CMakeFiles/Proiect_OOP.dir/Ingredient/Ingrediente.cpp.obj	18b329624035e53a
+275	340	7235008677709321	Proiect_OOP.exe	b6840d21d9a53eb0
+2	235	7235008727783335	CMakeFiles/Proiect_OOP.dir/main.cpp.obj	5bd9087059938537
+236	300	7235008728393268	Proiect_OOP.exe	b6840d21d9a53eb0
+3	293	7235013691408461	CMakeFiles/Proiect_OOP.dir/main.cpp.obj	5bd9087059938537
+7	308	7235013691561235	CMakeFiles/Proiect_OOP.dir/Ingredient/Ingrediente.cpp.obj	18b329624035e53a
+308	383	7235013692250871	Proiect_OOP.exe	b6840d21d9a53eb0
