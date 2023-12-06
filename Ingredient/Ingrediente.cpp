@@ -68,7 +68,7 @@ bool Ingrediente::get_alergen() const {
 }
 
 
-ostream &operator<<(ostream &out, const Ingrediente &a) {
+std::ostream &operator<<(std::ostream &out, const Ingrediente &a) {
     out << "\nNume ingredient: ";
     if(a.numeIngredient!= nullptr)
     {

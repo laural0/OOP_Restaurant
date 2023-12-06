@@ -9,10 +9,9 @@
 #include "../ExceptionInput/ExceptionInput.h"
 #include<iostream>
 
-using namespace std;
 
-class Ingrediente {
-    const int cod;
+class Ingrediente { //todo: poate sparta in 2 clase IngredientVrac si ingredientLabucata ? sau sa aiba un flag boolean daca e la bucata sau nu
+    const int cod;  //todo: clasa denumita la singular
     char *numeIngredient = nullptr;
     float kcalorii = 0;              //per 100g
     float pret = 0;                 //per 100g
@@ -61,7 +60,6 @@ public:
         this->alergen = a.alergen;
 
     }
-
     ~Ingrediente() {
         delete[] numeIngredient;
         numeIngredient = nullptr;
@@ -87,9 +85,9 @@ public:
 
     bool get_alergen() const;
 
-    friend ostream &operator<<(ostream &out, const Ingrediente &a);
+    friend std::ostream &operator<<(std::ostream &out, const Ingrediente &a);
 
-    friend istream &operator>>(istream &in, Ingrediente &a);
+    friend std::istream &operator>>(std::istream &in, Ingrediente &a);
 
 
     float CalculeazaCalorii() const;

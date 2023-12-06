@@ -1,9 +1,37 @@
 
-@
-ExceptionInput.h,a\5\a55f38fb227fa925db07ab2189525940b67259d5
-;
-Comanda.cpp,2\0\20cfda4b4d926753a2cc6d0714946b81a5fc5810
-9
-	Comanda.h,f\d\fdd7f4082b4457c2eef0b5ea1f504f4e28892906
 >
 CMakeLists.txt,9\a\9a2aa4db38d3115ed60da621e012c0efc0172aae
+Å
+Q.idea/sonarlint/securityhotspotstore/2/0/20cfda4b4d926753a2cc6d0714946b81a5fc5810,1\c\1c2ceeac581180cdbceabb8c92cfb8313a60325d
+w
+G.idea/sonarlint/issuestore/2/0/20cfda4b4d926753a2cc6d0714946b81a5fc5810,4\d\4db7599c61d0d38d095c712211ce581c40755977
+Å
+Q.idea/sonarlint/securityhotspotstore/a/5/a55f38fb227fa925db07ab2189525940b67259d5,2\6\2635baec133518e1f04c1456a6b02ba45fdcca28
+J
+Ingredient/Ingrediente.cpp,f\f\ff15db03ec59a8b03229663d19357175e2b81ba1
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+C
+Comanda/Comanda.cpp,4\6\4689e86f1182fff87710da4ace958d5a21005c63
+A
+Comanda/Comanda.h,a\9\a99a8371ae3a486016a6883c2c1dc1db26af9c80
+Å
+Q.idea/sonarlint/securityhotspotstore/9/a/9a2aa4db38d3115ed60da621e012c0efc0172aae,e\4\e4b358d3d9fb3f2eec26eec20d2a1995e2cbfd1f
+Å
+Q.idea/sonarlint/securityhotspotstore/f/d/fdd7f4082b4457c2eef0b5ea1f504f4e28892906,2\8\288f202b3ed765f77c298a36448b88e6a3f85e35
+]
+-.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
+Q
+!ExceptionInput/ExceptionInput.cpp,c\b\cb229b9bf1c89f5e826a1dccc0809d2923c34328
+w
+G.idea/sonarlint/issuestore/9/a/9a2aa4db38d3115ed60da621e012c0efc0172aae,1\e\1e30e05b5189731ee9be6add1ef16336cdd01e07
+O
+ExceptionInput/ExceptionInput.h,2\9\29e1857c582dfe3bf8d391bc759800ed76bba9f5
+8
+main.cpp,6\8\682a50d19e416195436708e48c7761923b8d6651
+G
+Preparate/Preparate.cpp,1\e\1e3998b307663241e68df7886cb90c9673cdc4c4
+E
+Preparate/Preparate.h,f\f\ff380a27904fc83c6ed3f00bfd4fc7e8c9fdc1fd
+H
+Ingredient/Ingrediente.h,3\e\3e7376e879da5da8a0f6ffd452d590239d4581cc

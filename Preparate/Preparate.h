@@ -9,7 +9,7 @@
 #include <map>
 #include "../Ingredient/Ingrediente.h"
 
-class Preparate {
+class Preparate {  //todo: clasa denumita la singular : Preparat
     char *numePreparat;
     float cantitateaNecesara;
     map<Ingrediente, float>reteta;
