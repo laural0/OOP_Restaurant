@@ -5,11 +5,7 @@ using namespace std;
 
 int main() {
 
-
-
-    Ingrediente zahar(23,"zahar", 386.7, 18, 5, false);
-    cout<<zahar;
-
-
+    Ingredient banana("banana");
+    banana.adaugaIngredient();
     return 0;
 }
