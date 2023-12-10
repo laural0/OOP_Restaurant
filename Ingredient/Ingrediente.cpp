@@ -359,5 +359,67 @@ std::vector<Ingredient> Ingredient::getListaIngrediente() {
 
 }
 
+bool Ingredient::verificaInStoc(Ingredient ingredient) {
+
+    std::fstream fisier;
+    fisier.open("C:\\Users\\alex\\CLionProjects\\OOP_Restaurant\\Ingredient\\Ingredient.csv", std::ios::in);
+
+    std::string line;
+    std::vector<std::string> lista;
+
+    while (getline(fisier, line)) {
+        lista = stringParse(line, ','); //aici am fiecare element din ingredient sub format string
+        if (lista.size() >= 5) {
+            if (stof(lista[3]) < ingredient.stoc) return false;
+        }
+    }
+
+    fisier.close();
+    return true;
+}
+
+void Ingredient::modificaStoc(Ingredient ingredient, std::string flag) {
+
+    std::fstream fisier, fisierUpdate;
+
+    fisier.open("Ingredient.csv", std::ios::in);
+    fisierUpdate.open("IngredientNou.csv", std::ios::out);
+
+    std::string line;
+    std::vector<std::string> lines;
+
+    while (getline(fisier, line)) {
+        lines.push_back(line);
+    }
+
+    for (int i = 0; i < lines.size() - 1; i++) {
+        std::vector<std::string> parsedLine;
+        parsedLine = stringParse(lines[i], ','); //aici am fiecare element din ingredient sub format string
+        if (parsedLine[0] == ingredient.denumire) {
+            float stocNou;
+            if (flag == "minus") {
+                stocNou = stof(parsedLine[3]) - ingredient.stoc;
+            } else {
+                stocNou = stof(parsedLine[3]) + ingredient.stoc;
+            }
+
+            fisierUpdate << ingredient.denumire << ", "
+                         << ingredient.kcalorii << ", "
+                         << ingredient.pret << ", "
+                         << stocNou << ", "
+                         << ingredient.alergen
+                         << "\n";
+        }
+        fisierUpdate << lines[i] << "\n";
+    }
+    fisier.close();
+    fisierUpdate.close();
+
+    remove("Ingredient.csv");
+    rename("IngredientNou.csv", "Ingredient.csv");
+
+}
+
+
 
 

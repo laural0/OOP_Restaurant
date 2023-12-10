@@ -52,6 +52,10 @@ public:
     static std::vector<Preparat>getListaPreparate();
 
     void adaugaPreparat();
+
+    static bool verificaStocIngrediente(const Preparat& preparat);
+
+    static void modificaStocIngrediente(Preparat preparat, std::string flag);
 };
 
 

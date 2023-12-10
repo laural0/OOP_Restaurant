@@ -229,4 +229,19 @@ void Preparat::adaugaPreparat() {
 
 }
 
+bool Preparat::verificaStocIngrediente(const Preparat& preparat) {
+    for (const auto& ingredient: preparat.get_reteta())
+        if (!Ingredient::verificaInStoc(ingredient)) return false;
+
+    return true;
+}
+
+void Preparat::modificaStocIngrediente(Preparat preparat, std::string flag ) {
+
+    for(auto ingredient: preparat.get_reteta()){
+        Ingredient::modificaStoc(ingredient,flag);
+    }
+
+}
+
 

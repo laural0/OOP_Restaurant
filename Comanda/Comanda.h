@@ -10,7 +10,7 @@
 #include "../Preparate/Preparate.h"
 
 class Comanda {
-     int id;
+    int id;
 
     std::vector<std::string> listaPreparate;
     float sumaDePlata = 0.0;
@@ -67,8 +67,18 @@ public:
         return this->plata;
     }
 
-    void adaugaLaComanda(std::string denumirePreparat) {
-//        this->listaPreparate.push_back(preparat);
+    void adaugaLaComanda(std::string denumirePreparat, std::vector<Preparat> listaPreparate) {
+
+        for (auto preparat: listaPreparate) {
+            if (denumirePreparat == preparat.get_denumire()) {
+                bool inStoc = Preparat::verificaStocIngrediente(preparat);
+                if (inStoc) {
+                    Preparat::modificaStocIngrediente(preparat, "minus");
+                    this->listaPreparate.push_back(denumirePreparat);
+                }
+            }
+        }
+
     }
 
     void stergeDinComanda(std::string denumirePreparat) {
@@ -132,9 +142,18 @@ public:
     }
 
     Comanda(Comanda const &comanda) {
-       this->id = comanda.id;
-       this->listaPreparate = comanda.listaPreparate;
-       this->sumaDePlata=comanda.sumaDePlata;
-       this->plata=comanda.plata;
+        this->id = comanda.id;
+        this->listaPreparate = comanda.listaPreparate;
+        this->sumaDePlata = comanda.sumaDePlata;
+        this->plata = comanda.plata;
+    }
+
+
+    Comanda &operator=(const Comanda &comanda) {
+        this->id = comanda.id;
+        this->listaPreparate = comanda.listaPreparate;
+        this->sumaDePlata = comanda.sumaDePlata;
+        this->plata = comanda.plata;
+        return *this;
     }
 };

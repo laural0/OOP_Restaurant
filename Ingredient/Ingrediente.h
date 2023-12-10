@@ -71,6 +71,9 @@ public:
 
     static std::vector<Ingredient> getListaIngrediente();
 
+    static bool verificaInStoc(Ingredient ingredient);
+
+    static void modificaStoc(Ingredient ingredient, std::string basicString);
 };
 
 
