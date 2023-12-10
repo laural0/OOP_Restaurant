@@ -22,138 +22,33 @@ class Comanda {
 public:
     Comanda(const int id) : id(id) {}
 
-    Comanda(const int id, std::vector<std::string> &listaPreparate,
-            float sumaDePlata, metodaPlata plata) : id(id), listaPreparate(listaPreparate) {
+    Comanda(const int id, std::vector<std::string> &listaPreparate, float sumaDePlata, metodaPlata plata);
 
-        if (sumaDePlata < 0)
-            throw ExceptionInput("Nota trebuie sa fie pozitiva!");
-        else
-            this->sumaDePlata = sumaDePlata;
+    void set_listaPreparate(std::vector<std::string> &listaPreparate);
 
-        if (plata == byCash || plata == byCard)
-            this->plata = plata;
-        else
-            throw ExceptionInput("Metoda de plata invalida!.");
-    }
+    void set_sumaDePlata(float sumadeplata);
 
-    void set_listaPreparate(std::vector<std::string> &listaPreparate) {
-        this->listaPreparate = listaPreparate;
-    }
+    void set_plata(metodaPlata plata);
 
-    void set_sumaDePlata(float sumadeplata) {
-        if (sumadeplata > 0)
-            this->sumaDePlata = sumadeplata;
-        else
-            throw ExceptionInput("Nota trebuie sa fie pozitiva!");
-    }
+    std::vector<std::string> get_listaPreparate() const;
 
-    void set_plata(metodaPlata plata) {
-        if (plata == byCard || plata == byCard) {
-            this->plata = plata;
-        } else {
-            throw ExceptionInput("Metoda de plata invalida!");
-        }
-    }
+    float get_sumaDePlata() const;
 
-    std::vector<std::string> get_listaPreparate() const {
-        return this->listaPreparate;
-    }
+    metodaPlata get_plata() const;
 
-    float get_sumaDePlata() const {
-        return this->sumaDePlata;
-    }
+    void adaugaLaComanda(std::string denumirePreparat, std::vector<Preparat> listaPreparate);
 
-    metodaPlata get_plata() const {
-        return this->plata;
-    }
+    void stergeDinComanda(std::string denumirePreparat); //todo
 
-    void adaugaLaComanda(std::string denumirePreparat, std::vector<Preparat> listaPreparate) {
+    ~Comanda();
 
-        for (auto preparat: listaPreparate) {
-            if (denumirePreparat == preparat.get_denumire()) {
-                bool inStoc = Preparat::verificaStocIngrediente(preparat);
-                if (inStoc) {
-                    Preparat::modificaStocIngrediente(preparat, "minus");
-                    this->listaPreparate.push_back(denumirePreparat);
-                }
-            }
-        }
+    friend std::istream &operator>>(std::istream &in, Comanda &comanda);
 
-    }
+    friend std::ostream &operator<<(std::ostream &out, const Comanda &comanda);
 
-    void stergeDinComanda(std::string denumirePreparat) {
-//        for ()
-    }
+    Comanda(const Comanda &comanda);
 
+    Comanda &operator=(const Comanda &comanda);
 
-    ~Comanda() {}
-
-
-    friend std::istream &operator>>(std::istream &in, Comanda &comanda) {
-
-        std::cout
-                << "\n Lista de ingrediente. Adaugati ingredientele dupa denumire, cand doriti sa terminati inserati done: ";
-        std::string buffer;
-
-        while (buffer != "done") {
-            in >> buffer;
-            if (buffer != "done") {
-
-                comanda.listaPreparate.push_back(buffer);
-                std::cout << "\n Adaugati alt ingredient. Daca doriti sa incheiati adaugarea, inserati done: ";
-            }
-        }
-
-        std::cout << "\n Inserati suma totala de plata: ";
-        in >> comanda.sumaDePlata;
-
-        std::cout << "\n Metoda de plata: Cash/Card. Pentru cash inserati - 0 ; Pentru card inserati - 1: ";
-        int metodaPlata;
-        in >> metodaPlata;
-        if (metodaPlata == 0) {
-            comanda.plata = byCash;
-        } else {
-            comanda.plata = byCard;
-        }
-
-        return in;
-    }
-
-
-    friend std::ostream &operator<<(std::ostream &out, const Comanda &comanda) {
-        out << "\n Lista de ingrediente : ";
-        for (int i = 0; i < comanda.listaPreparate.size(); i++) {
-            out << comanda.listaPreparate[i];
-            if (i < comanda.listaPreparate.size() - 1) {
-                out << ", ";
-            } else {
-                out << ".";
-            }
-        }
-        out << "\n Suma totala de plata : " << comanda.sumaDePlata;
-        if (comanda.plata == 0) {
-
-            out << "\n Metoda de plata: CASH ";
-        } else {
-
-            out << "\n Metoda de plata: CARD ";
-        }
-        return out;
-    }
-
-    Comanda(Comanda const &comanda) {
-        this->id = comanda.id;
-        this->listaPreparate = comanda.listaPreparate;
-        this->sumaDePlata = comanda.sumaDePlata;
-        this->plata = comanda.plata;
-    }
-
-
-    Comanda &operator=(const Comanda &comanda) {
-        this->id = comanda.id;
-        this->listaPreparate = comanda.listaPreparate;
-        this->sumaDePlata = comanda.sumaDePlata;
-        this->plata = comanda.plata;
-        return *this;
-    }
+    bool operator==(const Comanda &comanda);
 };

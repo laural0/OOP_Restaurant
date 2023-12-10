@@ -14,5 +14,7 @@ add_executable(Proiect_OOP main.cpp
         Ingredient/Ingrediente.h
         Helper/Helper.cpp
         Helper/Helper.h
+        Client/Client.cpp
+        Client/Client.h
 
 )
