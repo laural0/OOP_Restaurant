@@ -12,9 +12,9 @@
 
 class Preparat {
     char *denumire = nullptr;
-    std::map<Ingredient, float> reteta;
+    std::vector<Ingredient> reteta;
     static float adaosComercial;        //in procent
-    bool dePost = false;
+    bool esteAlergen = false;
 
 public:
 
@@ -22,7 +22,7 @@ public:
 
     Preparat(char *numePreparat);
 
-    Preparat(char *numePreparat, std::map<Ingredient, float> &reteta, bool dePost);
+    Preparat(char *numePreparat, std::vector<Ingredient> &reteta, bool dePost);
 
     Preparat(Preparat &preparat);
 
@@ -31,7 +31,7 @@ public:
     void set_denumire(const char *denumire);
 
 
-    void set_reteta(const std::map<Ingredient, float> &reteta);
+    void set_reteta(const std::vector<Ingredient> &reteta);
 
     static void set_adaosComercial(const float adaosComercial);
 
@@ -39,7 +39,7 @@ public:
 
     char *get_denumire() const;
 
-    std::map<Ingredient, float> get_reteta() const;
+    std::vector<Ingredient> get_reteta() const;
 
     static float get_adaosComercial();
 
@@ -49,7 +49,7 @@ public:
 
     friend std::istream &operator>>(std::istream &in, Preparat &preparat);
 
-    void getListaPreparate();
+    static std::vector<Preparat>getListaPreparate();
 
     void adaugaPreparat();
 };

@@ -67,11 +67,10 @@ public:
     Ingredient &operator=(const Ingredient &ingredient);
 
 
-
-
     void adaugaIngredient();
 
     static std::vector<Ingredient> getListaIngrediente();
+
 };
 
 
