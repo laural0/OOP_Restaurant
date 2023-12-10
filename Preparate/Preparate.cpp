@@ -3,29 +3,31 @@
 //
 
 #include "Preparate.h"
+#include "../Helper/Helper.h"
 
-float Preparat::adaosComercial=400;
+float Preparat::adaosComercial = 400;
+
+Preparat::Preparat() {}
 
 Preparat::Preparat(char *numePreparat) {
     if (numePreparat != nullptr) {
         this->denumire = new char[strlen(numePreparat) + 1];
         strcpy(this->denumire, numePreparat);
+
+        convertLowercase(this->denumire);
     } else {
         throw ExceptionInput("Numele preparatului nu poate fi null.");
     }
 }
 
-Preparat::Preparat(char *numePreparat, float numarIngrediente, std::map<Ingredient, float> &reteta, bool dePost) {
+Preparat::Preparat(char *numePreparat, std::map<Ingredient, float> &reteta, bool dePost) {
     if (numePreparat != nullptr) {
         this->denumire = new char[strlen(numePreparat) + 1];
         strcpy(this->denumire, numePreparat);
+
+        convertLowercase(this->denumire);
     } else {
         throw ExceptionInput("Numele preparatului nu poate fi null.");
-    }
-    if (numarIngrediente > 0) {
-        this->numarIngrediente = numarIngrediente;
-    } else {
-        throw ExceptionInput("Cantitatea necesara trebuie sa fie mai mare decat 0.");
     }
 
     this->reteta = reteta;
@@ -33,11 +35,10 @@ Preparat::Preparat(char *numePreparat, float numarIngrediente, std::map<Ingredie
     this->dePost = dePost;
 }
 
-Preparat::Preparat(Preparat &a) {
-    this->denumire = a.denumire;
-    this->reteta = a.reteta;
-    this->numarIngrediente = a.numarIngrediente;
-    this->dePost = a.dePost;
+Preparat::Preparat(Preparat &preparat) {
+    this->denumire = preparat.denumire;
+    this->reteta = preparat.reteta;
+    this->dePost = preparat.dePost;
 
 }
 
@@ -50,18 +51,13 @@ void Preparat::set_denumire(const char *denumire) {
     if (denumire != nullptr) {
         this->denumire = new char[strlen(denumire) + 1];
         strcpy(this->denumire, denumire);
+
+        convertLowercase(this->denumire);
     } else {
         throw ExceptionInput("Numele preparatului nu poate fi null.");
     }
 }
 
-void Preparat::set_numarIngrediente(const float numarIngrediente) {
-    if (numarIngrediente > 0) {
-        this->numarIngrediente = numarIngrediente;
-    } else {
-        throw ExceptionInput("Cantitatea necesara trebuie sa fie mai mare decat 0.");
-    }
-}
 
 void Preparat::set_reteta(const std::map<Ingredient, float> &reteta) {
     this->reteta = reteta;
@@ -79,9 +75,6 @@ char *Preparat::get_denumire() const {
     return this->denumire;
 }
 
-float Preparat::get_numarIngrediente() const {
-    return this->numarIngrediente;
-}
 
 std::map<Ingredient, float> Preparat::get_reteta() const {
     return this->reteta;
@@ -95,50 +88,99 @@ bool Preparat::get_dePost() const {
     return this->dePost;
 }
 
-std::ostream &operator<<(std::ostream &out, const Preparat &a) {
+std::ostream &operator<<(std::ostream &out, const Preparat &preparat) {
     out << "\nNume preparat: ";
-    if (a.denumire != nullptr) {
-        out << a.denumire;
+    if (preparat.denumire != nullptr) {
+        out << preparat.denumire;
     } else {
         throw ExceptionInput("Numele preparatului nu poate fi null");
     }
-    out << "\nNumar ingrediente: ";
-    if (a.numarIngrediente > 0) {
-        out << a.numarIngrediente;
-    } else {
-        throw ExceptionInput("Cantitatea trebuie sa fie pozitiva.");
-    }
+
     out << "\nReteta: ";
-    for (auto it = a.reteta.begin(); it != a.reteta.end(); it++) {
+    for (auto it = preparat.reteta.begin(); it != preparat.reteta.end(); it++) {
         out << "\n      " << it->first << "  " << it->second;
     }
     out << "\nDe post: ";
-    if (a.dePost) { out << "Da"; }
+    if (preparat.dePost) { out << "Da"; }
     else { out << "Nu"; }
 
     return out;
 }
 
-std::istream &operator>>(std::istream &in, Preparat &a) {
-    delete[] a.denumire;
-    a.denumire = nullptr;
+std::istream &operator>>(std::istream &in, Preparat &preparat) {
+    if (preparat.denumire != nullptr) {
+        delete[] preparat.denumire;
+        preparat.denumire = nullptr;
+    }
 
-    std::cout<<"\nIntroduceti denumirea preparatului: ";
+    std::cout << "\nIntroduceti denumirea preparatului: ";
     std::string buffer;
     in >> buffer;
 
-    a.denumire = new char[buffer.size() + 1];
-    strcpy(a.denumire, buffer.data());
+    preparat.denumire = new char[buffer.size() + 1];
+    strcpy(preparat.denumire, buffer.data());
 
-    std::cout<<"\nReteta: ";
-    for(int i=0;i<a.numarIngrediente;i++){
+    convertLowercase(preparat.denumire);
+
+    std::cout << "\nSi acum ingredientele......";
+    std::vector<Ingredient> lista = Ingredient::getListaIngrediente();
+    for (int i = 0; i < lista.size(); i++)
+        std::cout << i + 1 << ". " << lista[i] << "\n";
+
+    std::cout << "Doriti sa adaugati un ingredient? Y/N\n";
+    char response;
+    std::cin >> response;
+    response == 'Y' || response=='y' ? response=true : response=false;
+    if(response) {
+        while (response) {
 
 
+            Ingredient ingredientNou;
+            std::cin >> ingredientNou;
 
-        //todo:  preia din lista de ingrediente numele dupa ce i se arata o lista cu coduri si alege codul
-        //alege 23.zahar, preia denumirea si o baga in map
+            ingredientNou.adaugaIngredient();
 
-        //todo: numarIngrediente este int nu float
+            std::cout << "Doriti sa mai adaugati?\n";
+            std::cin >> response;
+
+        }
+        std::cout << "Aceasta este lista actualizata: \n";
+        lista = Ingredient::getListaIngrediente();
+        for (int i = 0; i < lista.size(); i++)
+            std::cout << "      " << i + 1 << ". " << lista[i] << "\n";
     }
+
+
+    std::cout << "Ce ingrediente doriti sa includeti in noul preparat? Scrieti "
+                 "numerele ingredientelor urmate de o virgula.\n";
+    std::vector<int>answer;
+    int index;
+    while(std::cin>>index)
+        answer.push_back(index);
+
+    float cant;
+    std::cout << "Introduceti cantitatile pentru fiecare ingredient! \n";
+    for (int i = 0; i < answer.size(); i++) {
+        std::cout << "  Pentru " << lista[answer[i]-1].get_numeIngredient() << ": \n";
+        in >> cant;
+        preparat.reteta.insert(std::make_pair(lista[answer[i-1]], cant));
+
+    }
+
+    std::cout << "Este de post?  Y/N";
+    char reponse;
+    std::cin >> response;
+    reponse == 'Y' || response == 'y' ? preparat.dePost = true : preparat.dePost = false;
+
+    return in;
 }
+
+void Preparat::getListaPreparate(){
+
+}
+
+void Preparat::adaugaPreparat() {
+
+}
+
 

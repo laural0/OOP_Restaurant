@@ -29,3 +29,5 @@ H
 Ingredient/Ingrediente.h,3\e\3e7376e879da5da8a0f6ffd452d590239d4581cc
 I
 Ingredient/Ingredient.csv,f\1\f11046b08fb1b5ef967065905961159aceb1d005
+F
+Preparate/Preparat.csv,6\4\644b008b45c2d38c2035bf9949832754322825e5

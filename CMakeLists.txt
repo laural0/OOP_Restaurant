@@ -12,5 +12,7 @@ add_executable(Proiect_OOP main.cpp
         Preparate/Preparate.h
         Ingredient/Ingrediente.cpp
         Ingredient/Ingrediente.h
+        Helper/Helper.cpp
+        Helper/Helper.h
 
 )

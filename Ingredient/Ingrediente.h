@@ -8,6 +8,7 @@
 #include<cstring>
 #include "../ExceptionInput/ExceptionInput.h"
 #include<iostream>
+#include <vector>
 
 
 class Ingredient {
@@ -19,16 +20,21 @@ class Ingredient {
 
     void convertLowercase(char *sir);
 
+    void inregistreazaIngredient();
+
+    void actualizeazaIngredient(int linie);
 
 public:
 
     int cautaLinieIngredient();
 
+    Ingredient();
+
     explicit Ingredient(const char *denumire);
 
     Ingredient(char const *numeIngredient, float calorii, float pret, float stoc, bool alergen);
 
-    Ingredient(Ingredient const &a);
+    Ingredient(Ingredient const &ingredient);
 
     ~Ingredient();
 
@@ -52,22 +58,20 @@ public:
 
     bool get_alergen() const;
 
+    bool operator<(const Ingredient &ingredient) const;
+
     friend std::ostream &operator<<(std::ostream &out, const Ingredient &a);
 
     friend std::istream &operator>>(std::istream &in, Ingredient &a);
 
+    Ingredient &operator=(const Ingredient &ingredient);
+
+
+
+
     void adaugaIngredient();
 
-    void inregistreazaIngredient();
-
-    void actualizeazaIngredient(int linie);
-
-
-    //float CalculeazaCalorii() const;
-
-    //float CalculeazaPret() const;
-
-
+    static std::vector<Ingredient> getListaIngrediente();
 };
 
 

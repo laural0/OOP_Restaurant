@@ -79,6 +79,12 @@ build CMakeFiles/Proiect_OOP.dir/Ingredient/Ingrediente.cpp.obj: CXX_COMPILER__P
   OBJECT_DIR = CMakeFiles\Proiect_OOP.dir
   OBJECT_FILE_DIR = CMakeFiles\Proiect_OOP.dir\Ingredient
 
+build CMakeFiles/Proiect_OOP.dir/Helper/Helper.cpp.obj: CXX_COMPILER__Proiect_OOP_unscanned_Debug C$:/Users/Laura/CLionProjects/Proiect_OOP/Helper/Helper.cpp || cmake_object_order_depends_target_Proiect_OOP
+  DEP_FILE = CMakeFiles\Proiect_OOP.dir\Helper\Helper.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\Proiect_OOP.dir
+  OBJECT_FILE_DIR = CMakeFiles\Proiect_OOP.dir\Helper
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Proiect_OOP
@@ -87,7 +93,7 @@ build CMakeFiles/Proiect_OOP.dir/Ingredient/Ingrediente.cpp.obj: CXX_COMPILER__P
 #############################################
 # Link the executable Proiect_OOP.exe
 
-build Proiect_OOP.exe: CXX_EXECUTABLE_LINKER__Proiect_OOP_Debug CMakeFiles/Proiect_OOP.dir/main.cpp.obj CMakeFiles/Proiect_OOP.dir/Comanda/Comanda.cpp.obj CMakeFiles/Proiect_OOP.dir/ExceptionInput/ExceptionInput.cpp.obj CMakeFiles/Proiect_OOP.dir/Preparate/Preparate.cpp.obj CMakeFiles/Proiect_OOP.dir/Ingredient/Ingrediente.cpp.obj
+build Proiect_OOP.exe: CXX_EXECUTABLE_LINKER__Proiect_OOP_Debug CMakeFiles/Proiect_OOP.dir/main.cpp.obj CMakeFiles/Proiect_OOP.dir/Comanda/Comanda.cpp.obj CMakeFiles/Proiect_OOP.dir/ExceptionInput/ExceptionInput.cpp.obj CMakeFiles/Proiect_OOP.dir/Preparate/Preparate.cpp.obj CMakeFiles/Proiect_OOP.dir/Ingredient/Ingrediente.cpp.obj CMakeFiles/Proiect_OOP.dir/Helper/Helper.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Proiect_OOP.dir

@@ -7,27 +7,29 @@
 
 #include<iostream>
 #include <map>
+#include <sstream>
 #include "../Ingredient/Ingrediente.h"
 
 class Preparat {
-    char *denumire;
-    float numarIngrediente;
+    char *denumire = nullptr;
     std::map<Ingredient, float> reteta;
     static float adaosComercial;        //in procent
-    bool dePost;
+    bool dePost = false;
 
 public:
+
+    Preparat();
+
     Preparat(char *numePreparat);
 
-    Preparat(char *numePreparat, float numarIngrediente, std::map<Ingredient, float> &reteta, bool dePost);
+    Preparat(char *numePreparat, std::map<Ingredient, float> &reteta, bool dePost);
 
-    Preparat(Preparat &a);
+    Preparat(Preparat &preparat);
 
     ~Preparat();
 
     void set_denumire(const char *denumire);
 
-    void set_numarIngrediente(const float numarIngrediente);
 
     void set_reteta(const std::map<Ingredient, float> &reteta);
 
@@ -35,9 +37,7 @@ public:
 
     void set_dePost(const bool dePost);
 
-    char* get_denumire() const;
-
-    float get_numarIngrediente() const;
+    char *get_denumire() const;
 
     std::map<Ingredient, float> get_reteta() const;
 
@@ -45,9 +45,13 @@ public:
 
     bool get_dePost() const;
 
-    friend std::ostream &operator<<(std::ostream &out, const Preparat &a);
+    friend std::ostream &operator<<(std::ostream &out, const Preparat &preparat);
 
-    friend std::istream &operator>>(std::istream &in, Preparat &a);
+    friend std::istream &operator>>(std::istream &in, Preparat &preparat);
+
+    void getListaPreparate();
+
+    void adaugaPreparat();
 };
 
 
