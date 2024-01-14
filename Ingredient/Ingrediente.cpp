@@ -7,37 +7,24 @@
 #include <sstream>
 #include <vector>
 #include "../Helper/Helper.h"
+#include <iomanip>
 
-void Ingredient::convertLowercase(char *sir) {
-    char *p = sir;
-    for (; *p; ++p) *p = tolower(*p);
+
+void Ingredient::convertLowercase(std::string &sir) {
+    for (int i = 0; i < sir.size(); i++)
+        tolower(sir[i]);
 }
 
 Ingredient::Ingredient() {
-    std::cout << "constructor fara parametri";
+
 }
 
-Ingredient::Ingredient(const char *denumire) {
-    if (denumire == nullptr) {
-        throw ExceptionInput("Denumirea ingredientului nu poate fi nula.");
-
-    } else {
-        this->denumire = new char[strlen(denumire) + 1];
-        strcpy(this->denumire, denumire);
-
-        convertLowercase(this->denumire);
-    }
+Ingredient::Ingredient(const std::string denumire) {
+    this->denumire = denumire;
 }
 
-Ingredient::Ingredient(char const *numeIngredient, float calorii, float pret, float stoc, bool alergen) {
-    if (numeIngredient == nullptr) {
-        throw ExceptionInput("Atributul este null.");
-    } else {
-        this->denumire = new char[strlen(numeIngredient) + 1];
-        strcpy(this->denumire, numeIngredient);
-
-        convertLowercase(this->denumire);
-    }
+Ingredient::Ingredient(const std::string numeIngredient, float calorii, float pret, float stoc, bool alergen) {
+    this->denumire = numeIngredient;
     if (calorii <= 0) {
         throw ExceptionInput("Caloriile ingredientului trebuie sa fie mai mari decat 0.");
     } else {
@@ -58,18 +45,7 @@ Ingredient::Ingredient(char const *numeIngredient, float calorii, float pret, fl
 
 Ingredient::Ingredient(Ingredient const &ingredient) {
 
-
-    if (this->denumire != nullptr) {
-        delete[] this->denumire;
-        this->denumire = nullptr;
-    }
-    if (ingredient.denumire == nullptr) {
-        throw ExceptionInput("Denumirea este nula.");
-    } else {
-        this->denumire = new char[strlen(ingredient.denumire) + 1];
-        strcpy(this->denumire, ingredient.denumire);
-    }
-
+    this->denumire = ingredient.denumire;
     this->kcalorii = ingredient.kcalorii;
     this->pret = ingredient.pret;
     this->stoc = ingredient.stoc;
@@ -78,23 +54,14 @@ Ingredient::Ingredient(Ingredient const &ingredient) {
 }
 
 Ingredient::~Ingredient() {
-    delete[] denumire;
-    denumire = nullptr;
+
 }
 
-void Ingredient::set_denumire(const char *numeIngredient) {
-    if (this->denumire != nullptr) {
-        delete[] this->denumire;
-        this->denumire = nullptr;
-    }
-    if (numeIngredient == nullptr) {
-        throw ExceptionInput("Atributul este null.");
-    } else {
-        this->denumire = new char[strlen(numeIngredient) + 1];
-        strcpy(this->denumire, numeIngredient);
+void Ingredient::set_denumire(const std::string numeIngredient) {
 
-        convertLowercase(this->denumire);
-    }
+    this->denumire = numeIngredient;
+    convertLowercase(this->denumire);
+
 }
 
 void Ingredient::set_kcalorii(const float kcalorii) {
@@ -126,7 +93,7 @@ void Ingredient::set_alergen(const bool alergen) {
     this->alergen = alergen;
 }
 
-char *Ingredient::get_numeIngredient() const {
+std::string Ingredient::get_numeIngredient() const {
     return this->denumire;
 }
 
@@ -162,46 +129,55 @@ std::ostream &operator<<(std::ostream &out, const Ingredient &a) {
     return out;
 }
 
+bool Ingredient::operator!=(const Ingredient &ingredient) {
+    if (denumire == ingredient.denumire || kcalorii == ingredient.kcalorii ||
+        stoc == ingredient.stoc || pret == ingredient.pret || alergen == ingredient.alergen)
+        return false;
+    return true;
+}
+
 std::istream &operator>>(std::istream &in, Ingredient &ingredient) {
-    if (ingredient.denumire != nullptr) {
-        delete[] ingredient.denumire;
-        ingredient.denumire = nullptr;
-    }
 
     std::cout << "\nDenumire: ";
-    std::string buffer;
-    in >> buffer;
-
-    ingredient.denumire = new char[buffer.size() + 1];
-    strcpy(ingredient.denumire, buffer.data());
-
+    std::getline(in, ingredient.denumire);
     ingredient.convertLowercase(ingredient.denumire);
 
-    std::cout << "\nCalorii: ";
+    std::cout << "Calorii: ";
     in >> ingredient.kcalorii;
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignoră restul liniei, inclusiv newline
+
 
     if (ingredient.kcalorii <= 0) {
         throw ExceptionInput("Caloriile trebuie sa fie mai mari decat 0.");
     }
-
-    std::cout << "\nPret: ";
+    std::cout << "Pret: ";
     in >> ingredient.pret;
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignoră restul liniei, inclusiv newline
+
 
     if (ingredient.pret <= 0) {
         throw ExceptionInput("Pretul trebuie sa fie mai mare decat 0.");
     }
-    std::cout << "\nStoc: 1000";
-    ingredient.stoc = 1000;
+
+    std::cout << "Stoc: ";
+    in >> ingredient.stoc;
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignoră restul liniei, inclusiv newline
+
+
+    if (ingredient.stoc <= 0) {
+        throw ExceptionInput("Stocul trebuie sa fie mai mare decat 0.");
+    }
 
     char response;
 
-    std::cout << "\nEste alergen? y/n  ";
+    std::cout << "Este alergen? y/n";
     in >> response;
     if (response == 'y') {
         ingredient.alergen = true;
     } else {
         ingredient.alergen = false;
     }
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignoră restul liniei, inclusiv newline
 
     return in;
 }
@@ -217,28 +193,25 @@ std::istream &operator>>(std::istream &in, Ingredient &ingredient) {
 //}
 
 
-int Ingredient::cautaLinieIngredient() {
+int Ingredient::cautaLinieIngredient(std::string denumire) {
 
     std::fstream fisier;
-    fisier.open("C:\\Users\\alex\\CLionProjects\\OOP_Restaurant\\Ingredient\\Ingredient.csv", std::ios::in);
+    fisier.open("..//Ingredient//Ingredient.csv", std::ios::in);
 
     std::string line;
 
     if (!fisier.is_open()) { throw ExceptionInput("Nu s-a putut deschide fisierul."); }
-    if (this->denumire == nullptr) { throw ExceptionInput("Denumirea este nula."); }
 
-    std::getline(fisier, line);
-    std::stringstream lineS(line);
-    std::string cell;
+    int numarLinie = 0;
 
-    int numarLinie = 1;
     while (std::getline(fisier, line)) {
         std::stringstream lineS(line);
+        std::string cell;
         numarLinie++;
         int column = 0;
         while (std::getline(lineS, cell, ',') && column <= 1) {
             column++;
-            if (cell == this->denumire)
+            if (cell == denumire)
                 return numarLinie;
         }
     }
@@ -248,7 +221,7 @@ int Ingredient::cautaLinieIngredient() {
 }
 
 void Ingredient::adaugaIngredient() {
-    int linie = this->cautaLinieIngredient();
+    int linie = Ingredient::cautaLinieIngredient(this->denumire);
     if (linie != -1) {
         std::cout << "Ingredientul " << this->denumire
                   << " a fost deja inregistrat in stoc! Doresti sa il actualizezi ? Y/N ";
@@ -269,12 +242,12 @@ void Ingredient::adaugaIngredient() {
 void Ingredient::inregistreazaIngredient() {
     std::fstream fisier;
 
-    fisier.open("Ingredient.csv", std::ios::app);
+    fisier.open("..//Ingredient//Ingredient.csv", std::ios::app);
 
-    fisier << this->denumire << ", "
-           << this->kcalorii << ", "
-           << this->pret << ", "
-           << this->stoc << ", "
+    fisier << this->denumire << ","
+           << this->kcalorii << ","
+           << this->pret << ","
+           << this->stoc << ","
            << this->alergen
            << "\n";
 
@@ -285,8 +258,8 @@ void Ingredient::inregistreazaIngredient() {
 void Ingredient::actualizeazaIngredient(int linie) {
     std::fstream fisier, fisierUpdate;
 
-    fisier.open("Ingredient.csv", std::ios::in);
-    fisierUpdate.open("IngredientNou.csv", std::ios::out);
+    fisier.open("..//Ingredient//Ingredient.csv", std::ios::in);
+    fisierUpdate.open("..//Ingredient//IngredientNou.csv", std::ios::out);
 
     std::string line;
     std::vector<std::string> lines;
@@ -298,11 +271,16 @@ void Ingredient::actualizeazaIngredient(int linie) {
     for (int i = 0; i < linie - 1; i++)
         fisierUpdate << lines[i] << "\n";
 
-    fisierUpdate << this->denumire << ", "
-                 << this->kcalorii << ", "
-                 << this->pret << ", "
-                 << this->stoc << ", "
-                 << this->alergen
+    std::string alergen;
+    if (this->alergen == 1)
+        alergen = "true";
+    else
+        alergen = "false";
+    fisierUpdate << this->denumire << ","
+                 << this->kcalorii << ","
+                 << this->pret << ","
+                 << this->stoc << ","
+                 << alergen
                  << "\n";
 
     for (int i = linie + 1; i < lines.size(); i++)
@@ -311,8 +289,8 @@ void Ingredient::actualizeazaIngredient(int linie) {
     fisier.close();
     fisierUpdate.close();
 
-    remove("Ingredient.csv");
-    rename("IngredientNou.csv", "Ingredient.csv");
+    remove("..//Ingredient//Ingredient.csv");
+    rename("..//Ingredient//IngredientNou.csv", "..//Ingredient//Ingredient.csv");
 
 }
 
@@ -321,14 +299,13 @@ bool Ingredient::operator<(const Ingredient &ingredient) const {
 }
 
 Ingredient &Ingredient::operator=(const Ingredient &ingredient) {
-    delete[] this->denumire;
-    this->denumire = nullptr;
-
-    this->denumire = ingredient.denumire;
-    this->kcalorii = ingredient.kcalorii;
-    this->pret = ingredient.pret;
-    this->stoc = ingredient.stoc;
-    this->alergen = ingredient.alergen;
+    if (this != &ingredient) {
+        this->denumire = ingredient.denumire;
+        this->kcalorii = ingredient.kcalorii;
+        this->pret = ingredient.pret;
+        this->stoc = ingredient.stoc;
+        this->alergen = ingredient.alergen;
+    }
 
     return *this;
 }
@@ -336,17 +313,17 @@ Ingredient &Ingredient::operator=(const Ingredient &ingredient) {
 std::vector<Ingredient> Ingredient::getListaIngrediente() {
     std::fstream fisier;
 
-    fisier.open("C:\\Users\\alex\\CLionProjects\\OOP_Restaurant\\Ingredient\\Ingredient.csv", std::ios::in);
+    fisier.open("..//Ingredient//Ingredient.csv", std::ios::in);
 
     std::string line;
     std::vector<std::string> lista;
     std::vector<Ingredient> listaIngrediente;
     while (getline(fisier, line)) {
         lista = stringParse(line, ','); //aici am fiecare element din ingredient sub format string
-        bool dePost;
+        bool alergen;
         if (lista.size() >= 5) {
             bool dePost = (lista[4] == "false") ? false : true;
-            Ingredient ingredient(lista[0].c_str(), stof(lista[1]), stof(lista[2]), stof(lista[3]), dePost);
+            Ingredient ingredient(lista[0], stof(lista[1]), stof(lista[2]), stof(lista[3]), alergen);
             listaIngrediente.push_back(ingredient);
 
         } else {
@@ -359,17 +336,19 @@ std::vector<Ingredient> Ingredient::getListaIngrediente() {
 
 }
 
-bool Ingredient::verificaInStoc(Ingredient ingredient) {
+//functie destinata clasei comanda
+bool Ingredient::verificaInStoc(const Ingredient &ingredient) {
 
     std::fstream fisier;
-    fisier.open("C:\\Users\\alex\\CLionProjects\\OOP_Restaurant\\Ingredient\\Ingredient.csv", std::ios::in);
+    fisier.open("..//Ingredient//Ingredient.csv", std::ios::in);
+    if(!fisier.is_open()){throw ExceptionInput("Fisierul Ingredient.csv nu a putut fi deschis.");}
 
     std::string line;
     std::vector<std::string> lista;
 
     while (getline(fisier, line)) {
         lista = stringParse(line, ','); //aici am fiecare element din ingredient sub format string
-        if (lista.size() >= 5) {
+        if (!lista.empty() && lista.size()==5) {
             if (stof(lista[3]) < ingredient.stoc) return false;
         }
     }
@@ -378,21 +357,60 @@ bool Ingredient::verificaInStoc(Ingredient ingredient) {
     return true;
 }
 
-void Ingredient::modificaStoc(Ingredient ingredient, std::string flag) {
+//doar daca exista in lista
+Ingredient Ingredient::getIngredientDinLista(int linieDinFisier) {
+    std::fstream fisier;
+    fisier.open("..//Ingredient//Ingredient.csv", std::ios::in);
 
-    std::fstream fisier, fisierUpdate;
+    std::string line;
+    std::vector<std::string> lista;
 
-    fisier.open("Ingredient.csv", std::ios::in);
-    fisierUpdate.open("IngredientNou.csv", std::ios::out);
+    Ingredient ingredient;
+    int index = 0;
+
+    while (getline(fisier, line)) {
+        index++;
+        if (index == linieDinFisier) {
+            lista = stringParse(line, ','); //aici am fiecare element din ingredient sub format string
+            ingredient.set_denumire(lista[0]);
+            ingredient.set_kcalorii(stof(lista[1]));
+            ingredient.set_pret(stof(lista[2]));
+            ingredient.set_stoc(stof(lista[3]));
+            ingredient.set_alergen(lista[4] == "true");
+            break;
+        }
+    }
+
+    fisier.close();
+    return ingredient;
+}
+
+void Ingredient::modificaStoc(const Ingredient &ingredient, const std::string &flag) {
+
+    std::fstream fisier;
+    std::fstream fisierUpdate;
+    std::fstream raportStoc;
+
+
+    raportStoc.open("..//Rapoarte//ModificareStoc.txt", std::ios::app);
+    fisier.open("..//Ingredient//Ingredient.csv", std::ios::in);
+    fisierUpdate.open("..//Ingredient//IngredientNou.csv", std::ios::out);
+
+    raportStoc << std::setw(21) << ingredient.denumire;
+    raportStoc << std::setw(15) << (flag == "minus" ? "scadere" : "adaugare");
+    raportStoc << std::setw(10) << ingredient.stoc;
+    raportStoc << std::setw(30) << dataCurenta() << '\n';
+
 
     std::string line;
     std::vector<std::string> lines;
 
     while (getline(fisier, line)) {
-        lines.push_back(line);
+        if(!line.empty())
+            lines.push_back(line);
     }
 
-    for (int i = 0; i < lines.size() - 1; i++) {
+    for (int i = 0; i < lines.size(); i++) {
         std::vector<std::string> parsedLine;
         parsedLine = stringParse(lines[i], ','); //aici am fiecare element din ingredient sub format string
         if (parsedLine[0] == ingredient.denumire) {
@@ -402,21 +420,27 @@ void Ingredient::modificaStoc(Ingredient ingredient, std::string flag) {
             } else {
                 stocNou = stof(parsedLine[3]) + ingredient.stoc;
             }
+            std::string alergen;
+            if (ingredient.alergen == 1)
+                alergen = "true";
+            else
+                alergen = "false";
 
-            fisierUpdate << ingredient.denumire << ", "
-                         << ingredient.kcalorii << ", "
-                         << ingredient.pret << ", "
-                         << stocNou << ", "
-                         << ingredient.alergen
+
+            fisierUpdate << ingredient.denumire << ","
+                         << parsedLine[1] << ","
+                         << parsedLine[2] << ","
+                         << stocNou << ","
+                         << alergen
                          << "\n";
-        }
-        fisierUpdate << lines[i] << "\n";
+        } else { fisierUpdate << lines[i] << "\n"; }
     }
     fisier.close();
     fisierUpdate.close();
+    raportStoc.close();
 
-    remove("Ingredient.csv");
-    rename("IngredientNou.csv", "Ingredient.csv");
+    remove("..//Ingredient//Ingredient.csv");
+    rename("..//Ingredient//IngredientNou.csv", "..//Ingredient//Ingredient.csv");
 
 }
 

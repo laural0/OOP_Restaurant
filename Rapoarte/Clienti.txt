@@ -1,0 +1,2 @@
+    NUME      |      PRENUME    |            EMAIL           |          NUMAR COMENZI DATE          |        PREPARAT FAVORIT         |        CUMPARAT         |
+     laura         lupuleasa           client@yahoo.com                                1                   Salata cu mozzarella                      1

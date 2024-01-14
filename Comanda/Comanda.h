@@ -10,35 +10,44 @@
 #include "../Preparate/Preparate.h"
 
 class Comanda {
-    int id;
-
-    std::vector<std::string> listaPreparate;
+    int id=0;
+    std::vector<Preparat> listaPreparate;
     float sumaDePlata = 0.0;
     enum metodaPlata {
         byCash, byCard
     };
-    metodaPlata plata;
+    metodaPlata plata; //todo: verific ca plata sa aiba doar valoarea 1 sau 0
 
 public:
-    Comanda(const int id) : id(id) {}
+    Comanda();
 
-    Comanda(const int id, std::vector<std::string> &listaPreparate, float sumaDePlata, metodaPlata plata);
+    Comanda(int id) : id(id) {}
 
-    void set_listaPreparate(std::vector<std::string> &listaPreparate);
+    Comanda(int id, const std::vector<Preparat> &listaPreparate, float sumaDePlata, metodaPlata plata);
+
+    Comanda(Comanda &&sursa);
+
+    void set_listaPreparate(const std::vector<Preparat> &listaPreparate);
 
     void set_sumaDePlata(float sumadeplata);
 
     void set_plata(metodaPlata plata);
 
-    std::vector<std::string> get_listaPreparate() const;
+    void set_id(int id);
+
+    std::vector<Preparat> get_listaPreparate() const;
 
     float get_sumaDePlata() const;
 
     metodaPlata get_plata() const;
 
-    void adaugaLaComanda(std::string denumirePreparat, std::vector<Preparat> listaPreparate);
+    float get_caloriiTotale();
 
-    void stergeDinComanda(std::string denumirePreparat); //todo
+    float calculeazaSumaDePlata();
+
+    void adaugaLaComanda(const Preparat &preparat);
+
+    void stergeDinComanda(const Preparat &preparat);
 
     ~Comanda();
 
@@ -51,4 +60,8 @@ public:
     Comanda &operator=(const Comanda &comanda);
 
     bool operator==(const Comanda &comanda);
+
+    static void raportFrecventaPreparate(const std::vector<Comanda>& comenzi);
+
+    static void genereazaRaportComenzi(const Comanda *comanda);
 };

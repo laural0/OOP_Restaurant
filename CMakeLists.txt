@@ -16,5 +16,7 @@ add_executable(Proiect_OOP main.cpp
         Helper/Helper.h
         Client/Client.cpp
         Client/Client.h
+        Meniu/Meniu.cpp
+        Meniu/Meniu.h
 
 )

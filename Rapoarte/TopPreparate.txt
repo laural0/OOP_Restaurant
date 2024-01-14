@@ -1,0 +1,11 @@
+|     Denumire preparat   |    Aparitii    |
+|-------------------------|----------------|
+
+          Supa de pui              2
+      Ciocolata calda              1
+          apa cu sare              1
+          Supa de pui              2
+          Supa de pui              2
+          Supa de pui              2
+Paste cu sos de rosii              1
+ Salata cu mozzarella              1

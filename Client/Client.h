@@ -6,24 +6,30 @@
 #define PROIECT_OOP_CLIENT_H
 
 #include<iostream>
+#include "../Comanda/Comanda.h"
+#include<list>
 
 class Client {
     std::string nume;
     std::string prenume;
     const std::string email;
-    int nrComenziDate;
+    std::map<int, Comanda> comenziDate;
 public:
-    Client(std::string email);
+    Client(const std::string &email);
 
-    Client(std::string nume, std::string prenume, std::string email, int nrComenzi);
+    Client(const std::string &nume, const std::string &prenume, const std::string &email, std::map<int, Comanda> comenziDate);
 
     Client(const Client &client);
 
-    void set_nume(const std::string nume);
+    void set_nume(const std::string &nume);
 
-    void set_prenume(const std::string prenume);
+    void set_prenume(const std::string &prenume);
 
-    void set_nrComenziDate(const int nrComenzi);
+    void set_comenziDate(const std::map<int, Comanda> &comenziDate);
+
+    void adaugaComandaLaClient(int id, const Comanda &comanda);
+
+    static void raportClienti(const std::vector<Client>&clienti);
 
     std::string get_nume() const;
 
@@ -31,15 +37,15 @@ public:
 
     std::string get_prenume() const;
 
-    int get_nrComenziDate() const;
+    std::map<int, Comanda> get_comenziDate() const;
 
     friend std::ostream &operator<<(std::ostream &out, const Client &client);
 
-    friend std::istream &operator>>(std::istream &in, Client client);
+    friend std::istream &operator>>(std::istream &in, Client &client);
 
     Client& operator=(const Client &client);
 
-    Client &operator++();
+    std::pair<std::string,int> preparatFavorit();
 
     ~Client();
 

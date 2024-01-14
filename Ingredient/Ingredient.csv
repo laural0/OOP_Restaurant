@@ -1,9 +1,19 @@
-faina,364,2.5,1000,false
-zahar,387,1.8,1000,false
-lapte,42,1.2,1000,false
-oua,155,0.8,1000,true
-ulei de masline,884,5.5,1000,false
-ciocolata,546,3.2,1000,true
-orez,130,1.5,1000,false
-carne de pui,165,7.9,1000,false
-mere,52,1.2,1000,false
+faina,2,1,1800,true
+zahar,387,1.8,1970,false
+lapte,1,1,1580,false
+oua,155,0.8,1700,true
+ulei de masline,884,5.5,1820,false
+ciocolata,546,3.2,1800,true
+orez,130,1.5,1700,false
+carne de pui,100,2.7,1400,true
+mere,52,1.2,2000,false
+paste,342,2.3,1800,false
+mozzarella,75,1.6,1400,false
+ceapa,16,0.7,1700,false
+rosii,35,0.7,1600,false
+cartofi,100,1.7,1800,false
+ulei de masline,250,2.6,1820,false
+sare,10,0.2,1995,false
+ciuperci,38,0.9,1850,false
+marar,5,0.2,1850,false
+morcov,7,0.4,1600,false

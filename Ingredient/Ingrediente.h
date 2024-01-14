@@ -12,13 +12,13 @@
 
 
 class Ingredient {
-    char *denumire = nullptr;
+    std::string denumire = "";
     float kcalorii = 0;              //per 100g
     float pret = 0;                 //per 100g
     float stoc = 0;
     bool alergen = false;
 
-    void convertLowercase(char *sir);
+    void convertLowercase(std::string &sir);
 
     void inregistreazaIngredient();
 
@@ -26,19 +26,19 @@ class Ingredient {
 
 public:
 
-    int cautaLinieIngredient();
+    static int cautaLinieIngredient(std::string denumire);
 
     Ingredient();
 
-    explicit Ingredient(const char *denumire);
+    explicit Ingredient(const std::string denumire);
 
-    Ingredient(char const *numeIngredient, float calorii, float pret, float stoc, bool alergen);
+    Ingredient(const std::string numeIngredient, float calorii, float pret, float stoc, bool alergen);
 
     Ingredient(Ingredient const &ingredient);
 
     ~Ingredient();
 
-    void set_denumire(const char *numeIngredient);
+    void set_denumire(const std::string numeIngredient);
 
     void set_kcalorii(const float kcalorii);
 
@@ -48,7 +48,7 @@ public:
 
     void set_alergen(const bool alergen);
 
-    char *get_numeIngredient() const;
+    std::string get_numeIngredient() const;
 
     float get_kcalorii() const;
 
@@ -66,14 +66,18 @@ public:
 
     Ingredient &operator=(const Ingredient &ingredient);
 
+    bool operator!=(const Ingredient &ingredient);
+
+    static Ingredient getIngredientDinLista(int linieDinFisier);
 
     void adaugaIngredient();
 
+
     static std::vector<Ingredient> getListaIngrediente();
 
-    static bool verificaInStoc(Ingredient ingredient);
+    static bool verificaInStoc(const Ingredient &ingredient);
 
-    static void modificaStoc(Ingredient ingredient, std::string basicString);
+    static void modificaStoc(const Ingredient &ingredient, const std::string &flag);
 };
 
 

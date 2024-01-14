@@ -7,58 +7,50 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include <memory>
+#include <limits>
 
 float Preparat::adaosComercial = 400;
 
-Preparat::Preparat() {}
+Preparat::Preparat() = default;
 
-Preparat::Preparat(char *numePreparat) {
-    if (numePreparat != nullptr) {
-        this->denumire = new char[strlen(numePreparat) + 1];
-        strcpy(this->denumire, numePreparat);
+Preparat::Preparat(const std::string &numePreparat) : denumire(numePreparat) {
 
-        convertLowercase(this->denumire);
-    } else {
-        throw ExceptionInput("Numele preparatului nu poate fi null.");
-    }
 }
 
-Preparat::Preparat(char *numePreparat, std::vector<Ingredient> &reteta, bool dePost) {
-    if (numePreparat != nullptr) {
-        this->denumire = new char[strlen(numePreparat) + 1];
-        strcpy(this->denumire, numePreparat);
+Preparat::Preparat(const std::string &numePreparat, const std::vector<Ingredient> &reteta, bool alergen) : reteta(
+        reteta), esteAlergen(alergen) {
 
-        convertLowercase(this->denumire);
-    } else {
-        throw ExceptionInput("Numele preparatului nu poate fi null.");
-    }
-
-    this->reteta = reteta;
-
-    this->esteAlergen = dePost;
+    this->denumire = numePreparat;
 }
 
-Preparat::Preparat(Preparat &preparat) {
+Preparat::Preparat(const Preparat &preparat) {
     this->denumire = preparat.denumire;
     this->reteta = preparat.reteta;
     this->esteAlergen = preparat.esteAlergen;
 
 }
 
-Preparat::~Preparat() {
-    delete[]this->denumire;
-    this->denumire = nullptr;
+Preparat::Preparat(Preparat &&sursa)
+        : denumire(std::move(sursa.denumire)),
+          reteta(std::move(sursa.reteta)),
+          esteAlergen(sursa.esteAlergen) {
+
 }
 
-void Preparat::set_denumire(const char *denumire) {
-    if (denumire != nullptr) {
-        this->denumire = new char[strlen(denumire) + 1];
-        strcpy(this->denumire, denumire);
-
-        convertLowercase(this->denumire);
-    } else {
-        throw ExceptionInput("Numele preparatului nu poate fi null.");
+Preparat &Preparat::operator=(const Preparat &preparat){
+    if(this!=&preparat){
+        this->denumire=preparat.denumire;
+        this->reteta=preparat.reteta;
+        this->esteAlergen=preparat.esteAlergen;
     }
+    return *this;
+}
+
+Preparat::~Preparat() = default;
+
+void Preparat::set_denumire(const string &denumire) {
+    this->denumire = denumire;
 }
 
 
@@ -70,11 +62,11 @@ void Preparat::set_adaosComercial(const float adaosComercial) {
     Preparat::adaosComercial = adaosComercial;
 }
 
-void Preparat::set_dePost(const bool dePost) {
-    this->esteAlergen = dePost;
+void Preparat::set_Alergen(const bool alergen) {
+    this->esteAlergen = alergen;
 }
 
-char *Preparat::get_denumire() const {
+string Preparat::get_denumire() const {
     return this->denumire;
 }
 
@@ -87,159 +79,156 @@ float Preparat::get_adaosComercial() {
     return Preparat::adaosComercial;
 }
 
-bool Preparat::get_dePost() const {
+bool Preparat::get_Alergen() const {
     return this->esteAlergen;
 }
 
+//Preparat &Preparat::getPreparat(std::string denumire) {
+//
+//}
+
+bool Preparat::operator==(const Preparat &preparat) {
+    if(denumire!=preparat.denumire)
+        return false;
+    else
+    {
+        for(int i=0;i<reteta.size();i++)
+            if(this->reteta[i]!=preparat.reteta[i])
+                return false;
+
+    }
+    return true;
+}
+
+//rezolvat
 std::ostream &operator<<(std::ostream &out, const Preparat &preparat) {
     out << "\nNume preparat: ";
-    if (preparat.denumire != nullptr) {
-        out << preparat.denumire;
-    } else {
-        throw ExceptionInput("Numele preparatului nu poate fi null");
-    }
+    out << preparat.denumire;
 
-    out << "\nReteta: ";
-    for(auto it : preparat.reteta)
-        out<<"      "<<it<<"\n";
-    out << "\nDe post: ";
+    out << "\nReteta: \n";
+    for (auto const &it: preparat.reteta)
+        out << "      -" << it.get_numeIngredient() << "(" << it.get_stoc() << ")" << "\n";
+    out << "\nAlergen: ";
     if (preparat.esteAlergen) { out << "Da"; }
     else { out << "Nu"; }
 
     return out;
 }
 
+//rezolvat
 std::istream &operator>>(std::istream &in, Preparat &preparat) {
-    if (preparat.denumire != nullptr) {
-        delete[] preparat.denumire;
-        preparat.denumire = nullptr;
-    }
 
     std::cout << "\nIntroduceti denumirea preparatului: ";
-    std::string buffer;
-    in >> buffer;
 
-    preparat.denumire = new char[buffer.size() + 1];
-    strcpy(preparat.denumire, buffer.data());
+    std::getline(in, preparat.denumire);
 
-    convertLowercase(preparat.denumire);
 
-    std::cout << "\nSi acum ingredientele......";
+    std::cout << "Lista ingrediente disponibile: \n";
     std::vector<Ingredient> lista = Ingredient::getListaIngrediente();
-    for (int i = 0; i < lista.size(); i++)
-        std::cout << i + 1 << ". " << lista[i] << "\n";
 
-    std::cout << "Doriti sa adaugati un ingredient? Y/N\n";
-    char response;
-    std::cin >> response;
-    response == 'Y' || response == 'y' ? response = true : response = false;
-    if (response) {
-        while (response) {
-
-
-            Ingredient ingredientNou;
-            std::cin >> ingredientNou;
-
-            ingredientNou.adaugaIngredient();
-
-            std::cout << "Doriti sa mai adaugati?\n";
-            std::cin >> response;
-
-        }
-        std::cout << "Aceasta este lista actualizata: \n";
-        lista = Ingredient::getListaIngrediente();
-        for (int i = 0; i < lista.size(); i++)
-            std::cout << "      " << i + 1 << ". " << lista[i] << "\n";
+    for (int i = 0; i < lista.size(); i++) {
+        if ((i + 1) % 3) {
+            std::cout << "              " << i + 1 << ". " << lista[i].get_numeIngredient();
+            if (lista[i].get_alergen())
+                std::cout << "*" << "                ";
+            else
+                std::cout << "            ";
+        } else
+            std::cout << "                  " << i + 1 << ". " << lista[i].get_numeIngredient() << '\n';
     }
 
+    std::cout << "\nCe ingrediente contine? Scrieti-le despartite printr-o virgula. \n";
+    string listaCitita;
+    std::getline(in, listaCitita);
 
-    std::cout << "Ce ingrediente doriti sa includeti in noul preparat? Scrieti "
-                 "numerele ingredientelor urmate de o virgula.\n";
+    std::vector<std::string> listaCititaConvertita;
+    listaCititaConvertita = stringParse(listaCitita, ',');
     std::vector<int> answer;
-    int index;
-    while (std::cin >> index)
-        answer.push_back(index);
 
-    float cant;
-    std::cout << "Introduceti cantitatile pentru fiecare ingredient! \n";
-    for (int i = 0; i < answer.size(); i++) {
-        std::cout << "  Pentru " << lista[answer[i] - 1].get_numeIngredient() << ": \n";
-        in >> cant;
-        lista[answer[i]-1].set_stoc(cant);
-        preparat.reteta.push_back(lista[answer[i]-1]);
 
+    answer.reserve(listaCititaConvertita.size());
+    for (auto const &numar: listaCititaConvertita)
+        answer.push_back(stoi(numar));
+
+    for (auto i: answer) {
+        std::cout << "Cantitate pentru " << lista[i - 1].get_numeIngredient() << ": ";
+        float cantitate;
+        in >> cantitate;
+        lista[i - 1].set_stoc(cantitate);
+        if (lista[i - 1].get_alergen()) preparat.esteAlergen = true;
+        preparat.reteta.push_back(lista[i - 1]);
+
+        in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
-
-    std::cout << "Este de post?  Y/N";
-    char reponse;
-    std::cin >> response;
-    reponse == 'Y' || response == 'y' ? preparat.esteAlergen = true : preparat.esteAlergen = false;
 
     return in;
 }
 
-std::vector<Preparat> Preparat::getListaPreparate() {
-    std::fstream fisier;
+float Preparat::calculeazaPret() {
+    float sumaTotala=0;
+    for(int i=0;i<this->reteta.size();i++)
+        sumaTotala+=this->reteta[i].get_pret()*(this->reteta[i].get_stoc()/100);
 
-    fisier.open("Preparat.csv", std::ios::in);
-    if(fisier.is_open())
-        throw ExceptionInput("Fisierul nu a putut fi deschis");
-    std::string line;
-    int flag;
-    std::vector<std::string> lineParsat;
-    std::vector<Preparat> result;
-    while (std::getline(fisier, line)) {
+    return sumaTotala;
+}
 
-        Preparat p;
+float Preparat::calculeazaCalorii() {
+    float caloriiTotale=0;
+    for(int i=0;i<reteta.size();i++)
+        caloriiTotale+=reteta[i].get_kcalorii()*(reteta[i].get_stoc()/100);
 
-        lineParsat = stringParse(line, ';');
-        for (int i = 0; i < lineParsat.size(); i++) //3k+1
+    return caloriiTotale;
+}
+
+
+void Preparat::adaugaPreparat(Preparat preparat) {
+
+    int tipDePreparat;
+
+    std::cout<<"1 - pentru mancare";
+    std::cout<<"2 - pentru bautura";
+
+    std::cin>>tipDePreparat;
+    if(tipDePreparat==1 || tipDePreparat==2) {
+
+        std::ofstream fisier;
+        if(tipDePreparat==1) {
+            fisier.open("..//Preparate//Mancare.csv", std::ios::app);
+            if (!fisier.is_open())
+                throw ExceptionInput("Fisierul Mancare.csv nu a putut fi deschis");
+        }
+        else
         {
-            Ingredient ingredient;
-            if (i == 0)
-                p.set_denumire(lineParsat[i].c_str());
-            else {
-                std::vector<std::string> ingredientNecesar;
-                bool alergen;
-                ingredientNecesar = stringParse(lineParsat[i], ',');
-                ingredient.set_denumire(ingredientNecesar[0].c_str());
-                ingredient.set_stoc(stof(ingredientNecesar[1]));
-                if (ingredientNecesar[2] == "false")
-                    alergen = false;
-                else
-                    alergen = true;
+            fisier.open("..//Preparate//Bautura.csv", std::ios::app);
+            if (!fisier.is_open())
+                throw ExceptionInput("Fisierul Bautura.csv nu a putut fi deschis");
+        }
 
-                ingredient.set_alergen(alergen);
-            }
-            p.reteta.push_back(ingredient);
+        fisier << '\n';
+        fisier << preparat.denumire << ";";
+
+        for (int i = 0; i < preparat.reteta.size(); i++) {
+            fisier << preparat.reteta[i].get_numeIngredient() << ","
+                   << preparat.reteta[i].get_stoc() << ","
+                   << (preparat.reteta[i].get_alergen() ? "true" : "false");
+            if (i < preparat.reteta.size() - 1)
+                fisier << ";";
         }
-        for (int i = 0; i < p.reteta.size(); i++) {
-            if (p.reteta[i].get_alergen() == true)
-                p.esteAlergen = true;
-            else
-                p.esteAlergen = false;
-        }
-        //todo: result.push_back(p);
+        fisier.close();
     }
-    return result;
-
 }
 
-void Preparat::adaugaPreparat() {
-
-}
-
-bool Preparat::verificaStocIngrediente(const Preparat& preparat) {
-    for (const auto& ingredient: preparat.get_reteta())
+bool Preparat::verificaStocIngrediente(const Preparat &preparat) {
+    for (const auto &ingredient: preparat.get_reteta())
         if (!Ingredient::verificaInStoc(ingredient)) return false;
 
     return true;
 }
 
-void Preparat::modificaStocIngrediente(Preparat preparat, std::string flag ) {
+void Preparat::modificaStocIngrediente(const Preparat &preparat, const std::string &flag) {
 
-    for(auto ingredient: preparat.get_reteta()){
-        Ingredient::modificaStoc(ingredient,flag);
+    for (auto const &ingredient: preparat.get_reteta()) {
+        Ingredient::modificaStoc(ingredient, flag);
     }
 
 }
